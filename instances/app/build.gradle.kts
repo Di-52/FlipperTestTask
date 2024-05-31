@@ -12,11 +12,14 @@ dependencies {
 
     implementation(projects.components.singleactivity)
 
+    implementation(projects.components.root.api)
+    implementation(projects.components.root.impl)
     implementation(projects.components.bottombar.api)
     implementation(projects.components.bottombar.impl)
+    implementation(projects.components.choosekey.api)
+    implementation(projects.components.choosekey.impl)
     implementation(projects.components.lockerchoose.api)
     implementation(projects.components.lockerchoose.impl)
-
 
     implementation(libs.compose.ui)
     implementation(libs.compose.foundation)

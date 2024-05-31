@@ -19,4 +19,5 @@ dependencies {
 
     implementation(libs.bundles.decompose)
     implementation(libs.kotlin.serialization.json)
+    implementation(libs.system.ui.controller)
 }
