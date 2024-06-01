@@ -9,5 +9,5 @@ enum class BottomBarEnum(
 ) {
     DEVICE("Device", R.drawable.ic_connection_unselected_bg),
     ARCHIVE("Archive", R.drawable.ic_archive),
-    HUB("Hub", R.drawable.ic_hub)
+    HUB("Hub", R.drawable.ic_hub),
 }

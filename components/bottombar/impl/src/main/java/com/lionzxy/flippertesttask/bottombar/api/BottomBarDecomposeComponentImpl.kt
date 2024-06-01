@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 import com.arkivanov.decompose.router.stack.ChildStack
@@ -12,10 +14,12 @@ import com.arkivanov.decompose.router.stack.bringToFront
 import com.arkivanov.decompose.router.stack.childStack
 import com.arkivanov.decompose.value.Value
 import com.flipperdevices.core.decompose.DecomposeComponent
+import com.google.accompanist.systemuicontroller.rememberSystemUiController
 import com.lionzxy.flippertesttask.bottombar.BottomBarDecomposeComponent
 import com.lionzxy.flippertesttask.bottombar.composable.ComposableBottomBarScreen
 import com.lionzxy.flippertesttask.bottombar.config.BottomBarConfig
 import com.lionzxy.flippertesttask.bottombar.config.BottomBarEnum
+import com.lionzxy.flippertesttask.bottombar.impl.R
 import com.lionzxy.flippertesttask.core.di.AppGraph
 import com.lionzxy.flippertesttask.lockerchoose.api.LockerChooseDecomposeComponent
 import com.squareup.anvil.annotations.ContributesBinding
@@ -25,7 +29,8 @@ import dagger.assisted.AssistedInject
 
 class BottomBarDecomposeComponentImpl @AssistedInject constructor(
     @Assisted componentContext: ComponentContext,
-    private val lockerChooseDecomposeComponentFactory: LockerChooseDecomposeComponent.Factory
+    @Assisted private val onLockerClick: (Int) -> Value<Int>,
+    private val lockerChooseDecomposeComponentFactory: LockerChooseDecomposeComponent.Factory,
 ) : BottomBarDecomposeComponent(), ComponentContext by componentContext {
     private val navigation = StackNavigation<BottomBarConfig>()
 
@@ -41,6 +46,10 @@ class BottomBarDecomposeComponentImpl @AssistedInject constructor(
     @Suppress("NonSkippableComposable")
     override fun Render(modifier: Modifier) {
         val childStack by stack.subscribeAsState()
+        val bottomBarColor = colorResource(id = R.color.bottombar_background_color)
+        val systemUiController = rememberSystemUiController()
+        systemUiController.setStatusBarColor(color = Color.White)
+        systemUiController.setNavigationBarColor(color = bottomBarColor)
 
         ComposableBottomBarScreen(
             childStack = childStack,
@@ -55,24 +64,26 @@ class BottomBarDecomposeComponentImpl @AssistedInject constructor(
         )
     }
 
-
     private fun child(
         config: BottomBarConfig,
-        componentContext: ComponentContext
+        componentContext: ComponentContext,
     ): DecomposeComponent = when (config) {
-        BottomBarConfig.Archive -> lockerChooseDecomposeComponentFactory(
+        BottomBarConfig.Archive -> lockerChooseDecomposeComponentFactory.invoke(
             componentContext = componentContext,
-            tabName = config.enum.tabName
+            tabName = config.enum.tabName,
+            onLockerClick = onLockerClick
         )
 
-        BottomBarConfig.Device -> lockerChooseDecomposeComponentFactory(
+        BottomBarConfig.Device -> lockerChooseDecomposeComponentFactory.invoke(
             componentContext = componentContext,
-            tabName = config.enum.tabName
+            tabName = config.enum.tabName,
+            onLockerClick = onLockerClick
         )
 
-        is BottomBarConfig.Hub -> lockerChooseDecomposeComponentFactory(
+        BottomBarConfig.Hub -> lockerChooseDecomposeComponentFactory.invoke(
             componentContext = componentContext,
-            tabName = config.enum.tabName
+            tabName = config.enum.tabName,
+            onLockerClick = onLockerClick
         )
     }
 
@@ -80,7 +91,8 @@ class BottomBarDecomposeComponentImpl @AssistedInject constructor(
     @ContributesBinding(AppGraph::class, BottomBarDecomposeComponent.Factory::class)
     fun interface Factory : BottomBarDecomposeComponent.Factory {
         override fun invoke(
-            componentContext: ComponentContext
+            componentContext: ComponentContext,
+            onLockerClick: (Int) -> Value<Int>,
         ): BottomBarDecomposeComponentImpl
     }
 }

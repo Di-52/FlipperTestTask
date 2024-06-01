@@ -1,3 +1,6 @@
 package com.lionzxy.flippertesttask.lockerchoose.impl.config
 
-data class LockerModel(val lockerNumber: Int, val keyNumber: Int?)
+import kotlinx.serialization.Serializable
+
+@Serializable
+data class LockerModel(val lockerNumber: Int = -1, val keyNumber: Int? = null)

@@ -1,9 +1,7 @@
 package com.lionzxy.flippertesttask.bottombar.composable
 
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.material.BottomAppBar
 import androidx.compose.material.Icon
-import androidx.compose.material.IconButton
 import androidx.compose.material.Tab
 import androidx.compose.material.TabRow
 import androidx.compose.material.Text
@@ -18,7 +16,7 @@ import com.lionzxy.flippertesttask.bottombar.impl.R
 @Composable
 fun ComposableBottomBar(
     selectedTab: BottomBarEnum,
-    onSelect: (BottomBarEnum) -> Unit
+    onSelect: (BottomBarEnum) -> Unit,
 ) = TabRow(
     modifier = Modifier.fillMaxWidth(),
     selectedTabIndex = BottomBarEnum.entries.indexOf(selectedTab),
@@ -33,7 +31,7 @@ fun ComposableBottomBar(
             icon = {
                 Icon(
                     painter = painterResource(bottomBarTab.iconId),
-                    contentDescription = null
+                    contentDescription = null,
                 )
             }
         )
